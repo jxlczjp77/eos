@@ -300,6 +300,9 @@ if( options.count(name) ) { \
 
 fc::time_point calculate_genesis_timestamp( string tstr ) {
    fc::time_point genesis_timestamp;
+#ifdef _MSC_VER 
+#define strcasecmp _stricmp
+#endif
    if( strcasecmp (tstr.c_str(), "now") == 0 ) {
       genesis_timestamp = fc::time_point::now();
    } else {

@@ -207,13 +207,13 @@ DataStream& operator >> ( DataStream& ds, float64_t& v ) {
 
 template<typename DataStream>
 DataStream& operator << ( DataStream& ds, const float128_t& v ) {
-   fc::raw::pack(ds, *reinterpret_cast<const eosio::chain::uint128_t*>(&v));
+   fc::raw::pack(ds, *reinterpret_cast<const fc::uint128_t*>(&v));
    return ds;
 }
 
 template<typename DataStream>
 DataStream& operator >> ( DataStream& ds, float128_t& v ) {
-   fc::raw::unpack(ds, *reinterpret_cast<eosio::chain::uint128_t*>(&v));
+   fc::raw::unpack(ds, *reinterpret_cast<fc::uint128_t*>(&v));
    return ds;
 }
 

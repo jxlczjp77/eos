@@ -2,6 +2,14 @@
 #include <string>
 #include <fc/reflect/reflect.hpp>
 #include <iosfwd>
+#ifdef _MSC_VER
+#include <boost/multiprecision/cpp_int.hpp>
+using int128_t = boost::multiprecision::int128_t;
+using uint128_t = boost::multiprecision::uint128_t;
+#else
+using int128_t = __int128;
+using uint128_t = unsigned __int128;
+#endif //// _MSC_VER
 
 namespace eosio { namespace chain {
    using std::string;
@@ -87,8 +95,8 @@ namespace eosio { namespace chain {
       friend bool operator != ( const name& a, const name& b ) { return a.value != b.value; }
 
       operator bool()const            { return value; }
-      operator uint64_t()const        { return value; }
-      operator unsigned __int128()const       { return value; }
+	  operator uint64_t()const { return value; }
+      operator uint128_t()const       { return value; }
    };
 
 } } // eosio::chain

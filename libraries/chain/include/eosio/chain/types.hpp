@@ -22,7 +22,10 @@
 #include <fc/crypto/ripemd160.hpp>
 #include <fc/fixed_string.hpp>
 #include <fc/crypto/private_key.hpp>
-
+#ifdef _MSC_VER
+#include <fc/uint128.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+#endif
 #include <memory>
 #include <vector>
 #include <deque>
@@ -42,7 +45,11 @@
     NAME(Constructor&& c, chainbase::allocator<Allocator> a) \
     : id(0) BOOST_PP_SEQ_FOR_EACH(OBJECT_CTOR2_MACRO, _, FIELDS) \
     { c(*this); }
+#ifdef _MSC_VER
+#define OBJECT_CTOR(...) BOOST_PP_CAT(BOOST_PP_OVERLOAD(OBJECT_CTOR, __VA_ARGS__)(__VA_ARGS__),BOOST_PP_EMPTY())
+#else
 #define OBJECT_CTOR(...) BOOST_PP_OVERLOAD(OBJECT_CTOR, __VA_ARGS__)(__VA_ARGS__)
+#endif
 
 #define _V(n, v)  fc::mutable_variant_object(n, v)
 
@@ -188,8 +195,13 @@ namespace eosio { namespace chain {
    using weight_type         = uint16_t;
    using block_num_type      = uint32_t;
    using share_type          = int64_t;
+#ifdef _MSC_VER
+   using int128_t = boost::multiprecision::int128_t;
+   using uint128_t = fc::uint128_t;
+#else
    using int128_t            = __int128;
    using uint128_t           = unsigned __int128;
+#endif
    using bytes               = vector<char>;
 
 

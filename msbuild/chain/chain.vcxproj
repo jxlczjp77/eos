@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{2BDAB1A6-3525-45B6-B807-DA63AE9E1CFD}</ProjectGuid>
+    <RootNamespace>chain</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)out\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)out\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\libraries\chain\include;$(ProjectDir)..\..\libraries\chainbase\include;$(ProjectDir)..\..\libraries\fc\include;$(ProjectDir)..\..\libraries\wasm-jit\Include;$(ProjectDir)..\..\libraries\softfloat\source\Include;$(ProjectDir)..\..\libraries\utilities\include;$(ProjectDir)..\..\libraries\wabt;$(ProjectDir)..\..\libraries\builtins;$(ProjectDir)..\wabt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINDOWS;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4101;4521;4003;4068;4996;4267;4244;4193;4146;4018;4180;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\libraries\chain\include;$(ProjectDir)..\..\libraries\chainbase\include;$(ProjectDir)..\..\libraries\fc\include;$(ProjectDir)..\..\libraries\wasm-jit\Include;$(ProjectDir)..\..\libraries\softfloat\source\Include;$(ProjectDir)..\..\libraries\utilities\include;$(ProjectDir)..\..\libraries\wabt;$(ProjectDir)..\..\libraries\builtins;$(ProjectDir)..\wabt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINDOWS;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4101;4521;4003;4068;4996;4267;4244;4193;4146;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libraries\chain\abi_serializer.cpp" />
+    <ClCompile Include="..\..\libraries\chain\apply_context.cpp" />
+    <ClCompile Include="..\..\libraries\chain\asset.cpp" />
+    <ClCompile Include="..\..\libraries\chain\authorization_manager.cpp" />
+    <ClCompile Include="..\..\libraries\chain\block_header.cpp" />
+    <ClCompile Include="..\..\libraries\chain\block_header_state.cpp" />
+    <ClCompile Include="..\..\libraries\chain\block_log.cpp" />
+    <ClCompile Include="..\..\libraries\chain\block_state.cpp" />
+    <ClCompile Include="..\..\libraries\chain\chain_config.cpp" />
+    <ClCompile Include="..\..\libraries\chain\chain_id_type.cpp" />
+    <ClCompile Include="..\..\libraries\chain\controller.cpp" />
+    <ClCompile Include="..\..\libraries\chain\eosio_contract.cpp" />
+    <ClCompile Include="..\..\libraries\chain\eosio_contract_abi.cpp" />
+    <ClCompile Include="..\..\libraries\chain\fork_database.cpp" />
+    <ClCompile Include="..\..\libraries\chain\genesis_state.cpp" />
+    <ClCompile Include="..\..\libraries\chain\genesis_state_root_key.cpp" />
+    <ClCompile Include="..\..\libraries\chain\merkle.cpp" />
+    <ClCompile Include="..\..\libraries\chain\name.cpp" />
+    <ClCompile Include="..\..\libraries\chain\resource_limits.cpp" />
+    <ClCompile Include="..\..\libraries\chain\sigaction-win.cpp" />
+    <ClCompile Include="..\..\libraries\chain\snapshot.cpp" />
+    <ClCompile Include="..\..\libraries\chain\transaction.cpp" />
+    <ClCompile Include="..\..\libraries\chain\transaction_context.cpp" />
+    <ClCompile Include="..\..\libraries\chain\wasm_eosio_injection.cpp" />
+    <ClCompile Include="..\..\libraries\chain\wasm_eosio_validation.cpp" />
+    <ClCompile Include="..\..\libraries\chain\wasm_interface.cpp" />
+    <ClCompile Include="..\..\libraries\chain\wast_to_wasm.cpp" />
+    <ClCompile Include="..\..\libraries\chain\webassembly\wabt.cpp" />
+    <ClCompile Include="..\..\libraries\chain\webassembly\wavm.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\abi_def.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\abi_serializer.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\account_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\action.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\action_receipt.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\apply_context.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\asset.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\authority.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\authority_checker.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\authorization_manager.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_header.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_header_state.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_log.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_state.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_summary_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_timestamp.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\chain_config.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\chain_id_type.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\chain_snapshot.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\config.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\contract_table_objects.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\contract_types.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\controller.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\database_utils.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\eosio_contract.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\exceptions.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\fixed_key.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\fork_database.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\generated_transaction_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\genesis_state.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\global_property_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\incremental_merkle.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\merkle.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\multi_index_includes.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\name.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\permission_link_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\permission_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\producer_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\producer_schedule.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\protocol.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\resource_limits.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\resource_limits_private.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\reversible_block_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\snapshot.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\symbol.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\trace.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction_context.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction_metadata.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction_object.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\types.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_binary_ops.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_constraints.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_injection.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_validation.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_interface.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_interface_private.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wast_to_wasm.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\common.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\runtime_interface.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\wabt.hpp" />
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\wavm.hpp" />
+    <ClInclude Include="..\..\libraries\chain\sigaction-win.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\libraries\chain\include\eosio\chain\core_symbol.hpp.in" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

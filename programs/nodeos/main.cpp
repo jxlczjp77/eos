@@ -53,7 +53,11 @@ void configure_logging(const bfs::path& config_path)
 
 void logging_conf_loop()
 {
+#ifdef _MSC_VER
+	std::shared_ptr<boost::asio::signal_set> sighup_set(new boost::asio::signal_set(app().get_io_service(), CTRL_CLOSE_EVENT));
+#else
    std::shared_ptr<boost::asio::signal_set> sighup_set(new boost::asio::signal_set(app().get_io_service(), SIGHUP));
+#endif
    sighup_set->async_wait([sighup_set](const boost::system::error_code& err, int /*num*/) {
       if(!err)
       {
@@ -99,11 +103,11 @@ int main(int argc, char** argv)
       auto root = fc::app_path();
       app().set_default_data_dir(root / "eosio/nodeos/data" );
       app().set_default_config_dir(root / "eosio/nodeos/config" );
-      http_plugin::set_defaults({
-         .address_config_prefix = "",
-         .default_unix_socket_path = "",
-         .default_http_port = 8888
-      });
+      http_plugin_defaults def;
+	  def.address_config_prefix = "";
+	  def.default_unix_socket_path = "";
+	  def.default_http_port = 8888;
+      http_plugin::set_defaults(def);
       if(!app().initialize<chain_plugin, http_plugin, net_plugin, producer_plugin>(argc, argv))
          return INITIALIZE_FAIL;
       initialize_logging();

@@ -7,6 +7,10 @@
 #include <eosio/chain/transaction_object.hpp>
 #include <eosio/chain/global_property_object.hpp>
 
+#ifdef _MSC_VER
+#include "sigaction-win.h"
+#endif
+
 #pragma push_macro("N")
 #undef N
 #include <boost/accumulators/accumulators.hpp>

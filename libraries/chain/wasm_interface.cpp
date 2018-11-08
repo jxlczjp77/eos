@@ -22,7 +22,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <fstream>
-
+typedef boost::multiprecision::uint128_t b_uint128_t;
 namespace eosio { namespace chain {
    using namespace webassembly;
    using namespace webassembly::common;
@@ -1012,17 +1012,17 @@ class console_api : public context_aware_api {
          }
       }
 
-      void printi128(const __int128& val) {
+      void printi128(const int128_t& val) {
          if ( !ignore ) {
             bool is_negative = (val < 0);
-            unsigned __int128 val_magnitude;
+			b_uint128_t val_magnitude;
 
             if( is_negative )
-               val_magnitude = static_cast<unsigned __int128>(-val); // Works even if val is at the lowest possible value of a int128_t
+               val_magnitude = static_cast<b_uint128_t>(-val); // Works even if val is at the lowest possible value of a int128_t
             else
-               val_magnitude = static_cast<unsigned __int128>(val);
+               val_magnitude = static_cast<b_uint128_t>(val);
 
-            fc::uint128_t v(val_magnitude>>64, static_cast<uint64_t>(val_magnitude) );
+            fc::uint128_t v(static_cast<uint64_t>(val_magnitude>>64), static_cast<uint64_t>(val_magnitude) );
 
             if( is_negative ) {
                context.console_append("-");
@@ -1032,9 +1032,9 @@ class console_api : public context_aware_api {
          }
       }
 
-      void printui128(const unsigned __int128& val) {
+      void printui128(const uint128_t& val) {
          if ( !ignore ) {
-            fc::uint128_t v(val>>64, static_cast<uint64_t>(val) );
+            fc::uint128_t v(static_cast<uint64_t>(val>>64), static_cast<uint64_t>(val) );
             context.console_append(fc::variant(v).get_string());
          }
       }
@@ -1336,9 +1336,9 @@ class transaction_api : public context_aware_api {
          } FC_RETHROW_EXCEPTIONS(warn, "data as hex: ${data}", ("data", fc::to_hex(data, data_len)))
       }
 
-      bool cancel_deferred( const unsigned __int128& val ) {
-         fc::uint128_t sender_id(val>>64, uint64_t(val) );
-         return context.cancel_deferred_transaction( (unsigned __int128)sender_id );
+      bool cancel_deferred( const uint128_t& val ) {
+         fc::uint128_t sender_id( uint64_t(val>>64), uint64_t(val) );
+         return context.cancel_deferred_transaction( (uint128_t)sender_id );
       }
 };
 
@@ -1385,13 +1385,13 @@ class compiler_builtins : public context_aware_api {
       compiler_builtins( apply_context& ctx )
       :context_aware_api(ctx,true){}
 
-      void __ashlti3(__int128& ret, uint64_t low, uint64_t high, uint32_t shift) {
+      void __ashlti3(int128_t& ret, uint64_t low, uint64_t high, uint32_t shift) {
          fc::uint128_t i(high, low);
          i <<= shift;
-         ret = (unsigned __int128)i;
+         ret = (int128_t)i;
       }
 
-      void __ashrti3(__int128& ret, uint64_t low, uint64_t high, uint32_t shift) {
+      void __ashrti3(int128_t& ret, uint64_t low, uint64_t high, uint32_t shift) {
          // retain the signedness
          ret = high;
          ret <<= 64;
@@ -1399,21 +1399,39 @@ class compiler_builtins : public context_aware_api {
          ret >>= shift;
       }
 
-      void __lshlti3(__int128& ret, uint64_t low, uint64_t high, uint32_t shift) {
+      void __lshlti3(int128_t& ret, uint64_t low, uint64_t high, uint32_t shift) {
          fc::uint128_t i(high, low);
          i <<= shift;
-         ret = (unsigned __int128)i;
+         ret = (int128_t)i;
       }
 
-      void __lshrti3(__int128& ret, uint64_t low, uint64_t high, uint32_t shift) {
+      void __lshrti3(int128_t& ret, uint64_t low, uint64_t high, uint32_t shift) {
          fc::uint128_t i(high, low);
          i >>= shift;
-         ret = (unsigned __int128)i;
+         ret = (int128_t)i;
       }
 
-      void __divti3(__int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
-         __int128 lhs = ha;
-         __int128 rhs = hb;
+      void __divti3(int128_t& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
+         int128_t lhs = ha;
+         int128_t rhs = hb;
+
+         lhs <<= 64;
+         lhs |=  la;
+
+         rhs <<= 64;
+         rhs |=  lb;
+
+
+         EOS_ASSERT(rhs != 0, arithmetic_exception, "divide by zero");
+
+         lhs /= rhs;
+
+         ret = lhs;
+      }
+
+      void __udivti3(uint128_t& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
+         uint128_t lhs = ha;
+         uint128_t rhs = hb;
 
          lhs <<= 64;
          lhs |=  la;
@@ -1424,29 +1442,12 @@ class compiler_builtins : public context_aware_api {
          EOS_ASSERT(rhs != 0, arithmetic_exception, "divide by zero");
 
          lhs /= rhs;
-
          ret = lhs;
       }
 
-      void __udivti3(unsigned __int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
-         unsigned __int128 lhs = ha;
-         unsigned __int128 rhs = hb;
-
-         lhs <<= 64;
-         lhs |=  la;
-
-         rhs <<= 64;
-         rhs |=  lb;
-
-         EOS_ASSERT(rhs != 0, arithmetic_exception, "divide by zero");
-
-         lhs /= rhs;
-         ret = lhs;
-      }
-
-      void __multi3(__int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
-         __int128 lhs = ha;
-         __int128 rhs = hb;
+      void __multi3(int128_t& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
+         int128_t lhs = ha;
+         int128_t rhs = hb;
 
          lhs <<= 64;
          lhs |=  la;
@@ -1458,9 +1459,9 @@ class compiler_builtins : public context_aware_api {
          ret = lhs;
       }
 
-      void __modti3(__int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
-         __int128 lhs = ha;
-         __int128 rhs = hb;
+      void __modti3(int128_t& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
+         int128_t lhs = ha;
+         int128_t rhs = hb;
 
          lhs <<= 64;
          lhs |=  la;
@@ -1474,9 +1475,9 @@ class compiler_builtins : public context_aware_api {
          ret = lhs;
       }
 
-      void __umodti3(unsigned __int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
-         unsigned __int128 lhs = ha;
-         unsigned __int128 rhs = hb;
+      void __umodti3(uint128_t& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb) {
+         uint128_t lhs = ha;
+         uint128_t rhs = hb;
 
          lhs <<= 64;
          lhs |=  la;
@@ -1538,7 +1539,7 @@ class compiler_builtins : public context_aware_api {
          float128_t f = {{ l, h }};
          return f128_to_i64( f, 0, false );
       }
-      void __fixtfti( __int128& ret, uint64_t l, uint64_t h ) {
+      void __fixtfti( int128_t& ret, uint64_t l, uint64_t h ) {
          float128_t f = {{ l, h }};
          ret = ___fixtfti( f );
       }
@@ -1550,21 +1551,21 @@ class compiler_builtins : public context_aware_api {
          float128_t f = {{ l, h }};
          return f128_to_ui64( f, 0, false );
       }
-      void __fixunstfti( unsigned __int128& ret, uint64_t l, uint64_t h ) {
+      void __fixunstfti(uint128_t& ret, uint64_t l, uint64_t h ) {
          float128_t f = {{ l, h }};
-         ret = ___fixunstfti( f );
+         ret = uint128_t(___fixunstfti( f ));
       }
-      void __fixsfti( __int128& ret, float a ) {
+      void __fixsfti(int128_t& ret, float a ) {
          ret = ___fixsfti( softfloat_api::to_softfloat32(a).v );
       }
-      void __fixdfti( __int128& ret, double a ) {
+      void __fixdfti(int128_t& ret, double a ) {
          ret = ___fixdfti( softfloat_api::to_softfloat64(a).v );
       }
-      void __fixunssfti( unsigned __int128& ret, float a ) {
-         ret = ___fixunssfti( softfloat_api::to_softfloat32(a).v );
+      void __fixunssfti(uint128_t& ret, float a ) {
+         ret = uint128_t(___fixunssfti( softfloat_api::to_softfloat32(a).v ));
       }
-      void __fixunsdfti( unsigned __int128& ret, double a ) {
-         ret = ___fixunsdfti( softfloat_api::to_softfloat64(a).v );
+      void __fixunsdfti( uint128_t& ret, double a ) {
+         ret = uint128_t(___fixunsdfti( softfloat_api::to_softfloat64(a).v ));
       }
       double __floatsidf( int32_t i ) {
          return softfloat_api::from_softfloat64(i32_to_f64(i));
@@ -1583,12 +1584,12 @@ class compiler_builtins : public context_aware_api {
       }
       double __floattidf( uint64_t l, uint64_t h ) {
          fc::uint128_t v(h, l);
-         unsigned __int128 val = (unsigned __int128)v;
-         return ___floattidf( *(__int128*)&val );
+		 int128_t val = (int128_t)v;
+         return ___floattidf( *(int128_t*)&val );
       }
       double __floatuntidf( uint64_t l, uint64_t h ) {
          fc::uint128_t v(h, l);
-         return ___floatuntidf( (unsigned __int128)v );
+         return ___floatuntidf( (b_uint128_t)v );
       }
       int ___cmptf2( uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb, int return_value_if_nan ) {
          float128_t a = {{ la, ha }};

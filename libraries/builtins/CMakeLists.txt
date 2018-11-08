@@ -8,14 +8,14 @@ message ( STATUS "Configuring Builtins" )
 set(C_DEFINES, "-D__wasm__ -DQUAD_PRECISION")
 set( CMAKE_C_FLAGS " -Wall ${CMAKE_C_FLAGS} ${C_DEFINES}" )
 set ( builtins_sources
-   fixtfti.c
-   fixunstfti.c
-   fixsfti.c
-   fixdfti.c
-   fixunssfti.c
-   fixunsdfti.c
-   floattidf.c
-   floatuntidf.c
+   fixtfti.cc
+   fixunstfti.cc
+   fixsfti.cc
+   fixdfti.cc
+   fixunssfti.cc
+   fixunsdfti.cc
+   floattidf.cc
+   floatuntidf.cc
 )
 
 file ( GLOB builtins_headers "${CMAKE_CURRENT_SOURCE_DIR}*.h" )

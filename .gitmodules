@@ -4,8 +4,8 @@
 	branch = win-vs2017
 [submodule "libraries/appbase"]
 	path = libraries/appbase
-	url = https://github.com/eosio/appbase
-        ignore = dirty
+	url = https://github.com/jxlczjp77/appbase.git
+    branch = win-vs2017
 [submodule "contracts/musl/upstream"]
 	path = contracts/musl/upstream
 	url = https://github.com/EOSIO/musl.git
@@ -20,13 +20,13 @@
 
 [submodule "libraries/softfloat"]
 	path = libraries/softfloat
-	url = https://github.com/eosio/berkeley-softfloat-3
+	url = https://github.com/jxlczjp77/berkeley-softfloat-3.git
 [submodule "externals/magic_get"]
 	path = externals/magic_get
 	url = https://github.com/EOSIO/magic_get
 [submodule "libraries/fc"]
 	path = libraries/fc
-	url = https://github.com/EOSIO/fc
+	url = https://github.com/jxlczjp77/fc.git
 [submodule "libraries/wabt"]
 	path = libraries/wabt
 	url = http://github.com/EOSIO/wabt

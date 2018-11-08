@@ -3,6 +3,7 @@
  *  @copyright defined in eos/LICENSE.txt
  */
 #include <eosio/template_plugin/template_plugin.hpp>
+#include <fc/exception/exception.hpp>
 
 namespace eosio {
    static appbase::abstract_plugin& _template_plugin = app().register_plugin<template_plugin>();

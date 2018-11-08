@@ -190,10 +190,9 @@ class producer_plugin_impl : public std::enable_shared_from_this<producer_plugin
          for (const auto& p: bsp->active_schedule.producers) {
             active_producers.insert(p.producer_name);
          }
-
-         std::set_intersection( _producers.begin(), _producers.end(),
+		 std::set_intersection( _producers.begin(), _producers.end(),
                                 active_producers.begin(), active_producers.end(),
-                                boost::make_function_output_iterator( [&]( const chain::account_name& producer )
+                                boost::make_function_output_iterator( (std::function<void(const chain::account_name&)>)[&]( const chain::account_name& producer )
          {
             if( producer != bsp->header.producer ) {
                auto itr = std::find_if( active_producer_to_signing_key.begin(), active_producer_to_signing_key.end(),
@@ -1434,7 +1433,11 @@ bool producer_plugin_impl::maybe_produce_block() {
          return false;
       } FC_LOG_AND_DROP();
    } catch ( boost::interprocess::bad_alloc&) {
+#ifdef _MSC_VER
+	   raise(SIGABRT);
+#else
       raise(SIGUSR1);
+#endif
       return false;
    }
 

@@ -144,8 +144,10 @@ namespace eosio {
 
          websocket_server_tls_type https_server;
 
+#ifndef _MSC_VER
          optional<asio::local::stream_protocol::endpoint> unix_endpoint;
          websocket_local_server_type unix_server;
+#endif
 
          bool                     validate_host;
          set<string>              valid_hosts;
@@ -435,7 +437,9 @@ namespace eosio {
             boost::filesystem::path sock_path = options.at(my->unix_socket_path_option_name).as<string>();
             if (sock_path.is_relative())
                sock_path = app().data_dir() / sock_path;
-            my->unix_endpoint = asio::local::stream_protocol::endpoint(sock_path.string());
+#ifndef _MSC_VER
+			my->unix_endpoint = asio::local::stream_protocol::endpoint(sock_path.string());
+#endif
          }
 
          if( options.count( my->https_server_address_option_name ) && options.at( my->https_server_address_option_name ).as<string>().length()) {
@@ -498,6 +502,7 @@ namespace eosio {
          }
       }
 
+#ifndef _MSC_VER
       if(my->unix_endpoint) {
          try {
             my->unix_server.clear_access_channels(websocketpp::log::alevel::all);
@@ -519,6 +524,7 @@ namespace eosio {
             throw;
          }
       }
+#endif
 
       if(my->https_listen_endpoint) {
          try {

@@ -395,10 +395,10 @@ account_resource_limit resource_limits_manager::get_account_cpu_limit_ex( const 
    if( max_user_use_in_window <= cpu_used_in_window )
       arl.available = 0;
    else
-      arl.available = impl::downgrade_cast<int64_t>(max_user_use_in_window - cpu_used_in_window);
+      arl.available = impl::downgrade_cast<int64_t>(int64_t(max_user_use_in_window - cpu_used_in_window));
 
-   arl.used = impl::downgrade_cast<int64_t>(cpu_used_in_window);
-   arl.max = impl::downgrade_cast<int64_t>(max_user_use_in_window);
+   arl.used = impl::downgrade_cast<int64_t>(int64_t(cpu_used_in_window));
+   arl.max = impl::downgrade_cast<int64_t>(int64_t(max_user_use_in_window));
    return arl;
 }
 
@@ -434,10 +434,10 @@ account_resource_limit resource_limits_manager::get_account_net_limit_ex( const 
    if( max_user_use_in_window <= net_used_in_window )
       arl.available = 0;
    else
-      arl.available = impl::downgrade_cast<int64_t>(max_user_use_in_window - net_used_in_window);
+      arl.available = impl::downgrade_cast<int64_t>(int64_t(max_user_use_in_window - net_used_in_window));
 
-   arl.used = impl::downgrade_cast<int64_t>(net_used_in_window);
-   arl.max = impl::downgrade_cast<int64_t>(max_user_use_in_window);
+   arl.used = impl::downgrade_cast<int64_t>(int64_t(net_used_in_window));
+   arl.max = impl::downgrade_cast<int64_t>(int64_t(max_user_use_in_window));
    return arl;
 }
 

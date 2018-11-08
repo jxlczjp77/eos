@@ -307,7 +307,7 @@ namespace eosio { namespace chain {
                        ("f", ctx.maybe_shorten(field.name))("p", ctx.get_path_string()) );
 
          }
-         auto h1 = ctx.push_to_path( impl::field_path_item{ .parent_struct_itr = s_itr, .field_ordinal = i } );
+         auto h1 = ctx.push_to_path( impl::field_path_item{ s_itr, } );
          obj( field.name, _binary_to_variant(resolve_type( extension ? _remove_bin_extension(field.type) : field.type ), stream, ctx) );
       }
    }
@@ -365,7 +365,7 @@ namespace eosio { namespace chain {
             } EOS_RETHROW_EXCEPTIONS( unpack_exception, "Unable to unpack tag of variant '${p}'", ("p", ctx.get_path_string()) )
             EOS_ASSERT( (size_t)select < v_itr->second.types.size(), unpack_exception,
                         "Unpacked invalid tag (${select}) for variant '${p}'", ("select", select.value)("p",ctx.get_path_string()) );
-            auto h1 = ctx.push_to_path( impl::variant_path_item{ .variant_itr = v_itr, .variant_ordinal = static_cast<uint32_t>(select) } );
+            auto h1 = ctx.push_to_path( impl::variant_path_item{ v_itr, static_cast<uint32_t>(select) } );
             return vector<fc::variant>{v_itr->second.types[select], _binary_to_variant(v_itr->second.types[select], stream, ctx)};
          }
       }
@@ -434,7 +434,7 @@ namespace eosio { namespace chain {
                      "Specified type '${t}' in input array is not valid within the variant '${p}'",
                      ("t", ctx.maybe_shorten(variant_type_str))("p", ctx.get_path_string()) );
          fc::raw::pack(ds, fc::unsigned_int(it - v.types.begin()));
-         auto h1 = ctx.push_to_path( impl::variant_path_item{ .variant_itr = v_itr, .variant_ordinal = static_cast<uint32_t>(it - v.types.begin()) } );
+         auto h1 = ctx.push_to_path( impl::variant_path_item{ v_itr, static_cast<uint32_t>(it - v.types.begin()) } );
          _variant_to_binary( *it, var[size_t(1)], ds, ctx );
       } else if( (s_itr = structs.find(rtype)) != structs.end() ) {
          ctx.hint_struct_type_if_in_array( s_itr );
@@ -455,7 +455,7 @@ namespace eosio { namespace chain {
                      EOS_THROW( pack_exception, "Unexpected field '${f}' found in input object while processing struct '${p}'",
                                 ("f", ctx.maybe_shorten(field.name))("p", ctx.get_path_string()) );
                   {
-                     auto h1 = ctx.push_to_path( impl::field_path_item{ .parent_struct_itr = s_itr, .field_ordinal = i } );
+                     auto h1 = ctx.push_to_path( impl::field_path_item{ s_itr, i } );
                      auto h2 = ctx.disallow_extensions_unless( &field == &st.fields.back() );
                      _variant_to_binary(_remove_bin_extension(field.type), vo[field.name], ds, ctx);
                   }
@@ -477,7 +477,7 @@ namespace eosio { namespace chain {
             for( uint32_t i = 0; i < st.fields.size(); ++i ) {
                const auto& field = st.fields[i];
                if( va.size() > i ) {
-                  auto h1 = ctx.push_to_path( impl::field_path_item{ .parent_struct_itr = s_itr, .field_ordinal = i } );
+                  auto h1 = ctx.push_to_path( impl::field_path_item{ s_itr, i } );
                   auto h2 = ctx.disallow_extensions_unless( &field == &st.fields.back() );
                   _variant_to_binary(_remove_bin_extension(field.type), va[i], ds, ctx);
                } else if( ends_with(field.type, "$") && ctx.extensions_allowed() ) {
@@ -569,11 +569,11 @@ namespace eosio { namespace chain {
          } else {
             auto itr1 = abis.structs.find(rtype);
             if( itr1 != abis.structs.end() ) {
-               root_of_path = struct_type_path_root{ .struct_itr = itr1 };
+               root_of_path = struct_type_path_root{ itr1 };
             } else {
                auto itr2 = abis.variants.find(rtype);
                if( itr2 != abis.variants.end() ) {
-                  root_of_path = variant_type_path_root{ .variant_itr = itr2 };
+                  root_of_path = variant_type_path_root{ itr2 };
                }
             }
          }
@@ -581,9 +581,9 @@ namespace eosio { namespace chain {
 
       fc::scoped_exit<std::function<void()>> abi_traverse_context_with_path::push_to_path( const path_item& item ) {
          std::function<void()> callback = [this](){
-            EOS_ASSERT( path.size() > 0, abi_exception,
+            EOS_ASSERT(this->path.size() > 0, abi_exception,
                         "invariant failure in variant_to_binary_context: path is empty on scope exit" );
-            path.pop_back();
+            this->path.pop_back();
          };
 
          path.push_back( item );
@@ -612,14 +612,14 @@ namespace eosio { namespace chain {
          if( path.size() == 0 || !path.back().contains<array_index_path_item>() )
             return;
 
-         path.back().get<array_index_path_item>().type_hint = struct_type_path_root{ .struct_itr = itr };
+         path.back().get<array_index_path_item>().type_hint = struct_type_path_root{ itr };
       }
 
       void abi_traverse_context_with_path::hint_variant_type_if_in_array( const map<type_name, variant_def>::const_iterator& itr ) {
          if( path.size() == 0 || !path.back().contains<array_index_path_item>() )
             return;
 
-         path.back().get<array_index_path_item>().type_hint = variant_type_path_root{ .variant_itr = itr };
+         path.back().get<array_index_path_item>().type_hint = variant_type_path_root{ itr };
       }
 
       constexpr size_t const_strlen( const char* str )

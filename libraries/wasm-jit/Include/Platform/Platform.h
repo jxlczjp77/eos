@@ -8,8 +8,13 @@
 
 #ifdef _WIN32
 	#define THREAD_LOCAL thread_local
+#ifdef BUILD_AS_DLL
 	#define DLL_EXPORT __declspec(dllexport)
 	#define DLL_IMPORT __declspec(dllimport)
+#else
+	#define DLL_EXPORT 
+	#define DLL_IMPORT
+#endif
 	#define FORCEINLINE __forceinline
 	#define SUPPRESS_UNUSED(variable) (void)(variable);
 	#include <intrin.h>

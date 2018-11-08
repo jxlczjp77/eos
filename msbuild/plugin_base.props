@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)out\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\plugins\bnet_plugin\include;$(ProjectDir)..\..\plugins\chain_api_plugin\include;$(ProjectDir)..\..\plugins\chain_interface\include;$(ProjectDir)..\..\plugins\chain_plugin\include;$(ProjectDir)..\..\plugins\db_size_api_plugin\include;$(ProjectDir)..\..\plugins\faucet_testnet_plugin\include;$(ProjectDir)..\..\plugins\history_api_plugin\include;$(ProjectDir)..\..\plugins\history_plugin\include;$(ProjectDir)..\..\plugins\http_client_plugin\include;$(ProjectDir)..\..\plugins\http_plugin\include;$(ProjectDir)..\..\plugins\login_plugin\include;$(ProjectDir)..\..\plugins\mongo_db_plugin\include;$(ProjectDir)..\..\plugins\net_api_plugin\include;$(ProjectDir)..\..\plugins\net_plugin\include;$(ProjectDir)..\..\plugins\producer_api_plugin\include;$(ProjectDir)..\..\plugins\producer_plugin\include;$(ProjectDir)..\..\plugins\template_plugin\include;$(ProjectDir)..\..\plugins\test_control_api_plugin\include;$(ProjectDir)..\..\plugins\test_control_plugin\include;$(ProjectDir)..\..\plugins\txn_test_gen_plugin\include;$(ProjectDir)..\..\plugins\wallet_api_plugin\include;$(ProjectDir)..\..\plugins\wallet_plugin\include;$(ProjectDir)..\..\libraries\fc\vendor\websocketpp;$(ProjectDir)..\..\libraries\chain\include;$(ProjectDir)..\..\libraries\utilities\include;$(ProjectDir)..\..\libraries\fc\include;$(ProjectDir)..\..\libraries\appbase\include;$(ProjectDir)..\..\libraries\chainbase\include;$(ProjectDir)..\..\libraries\wasm-jit\Include;$(ProjectDir)..\..\libraries\wabt;$(ProjectDir)..\..\libraries\builtins;$(ProjectDir)..\..\libraries\softfloat\source\Include;$(ProjectDir)..\wabt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WAVM_METRICS_OUTPUT=0;PRETEND_32BIT_ADDRESS_SPACE=0;ENABLE_SIMD_PROTOTYPE=0;ENABLE_THREADING_PROTOTYPE=0;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <DisableSpecificWarnings>4101;4521;4003;4068;4996;4267;4244;4193;4146;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>chain_plugin.lib;wallet_plugin.lib;wallet_api_plugin.lib;test_control_plugin.lib;test_control_api_plugin.lib;template_plugin.lib;producer_plugin.lib;producer_api_plugin.lib;net_plugin.lib;net_api_plugin.lib;mongo_db_plugin.lib;login_plugin.lib;http_plugin.lib;http_client_plugin.lib;history_plugin.lib;history_api_plugin.lib;faucet_testnet_plugin.lib;db_size_api_plugin.lib;chain_api_plugin.lib;bnet_plugin.lib;fc.lib;chainbase.lib;chain.lib;appbase.lib;softfloat.lib;builtins.lib;Logging.lib;IR.lib;WAST.lib;WASM.lib;Runtime.lib;Emscripten.lib;Userenv.lib;LLVMPasses.lib;LLVMipo.lib;LLVMInstrumentation.lib;LLVMVectorize.lib;LLVMIRReader.lib;LLVMAsmParser.lib;LLVMLinker.lib;LLVMMCJIT.lib;LLVMExecutionEngine.lib;LLVMRuntimeDyld.lib;LLVMDebugInfoDWARF.lib;LLVMX86CodeGen.lib;LLVMAsmPrinter.lib;LLVMDebugInfoCodeView.lib;LLVMDebugInfoMSF.lib;LLVMGlobalISel.lib;LLVMSelectionDAG.lib;LLVMCodeGen.lib;LLVMScalarOpts.lib;LLVMInstCombine.lib;LLVMBitWriter.lib;LLVMTransformUtils.lib;LLVMTarget.lib;LLVMAnalysis.lib;LLVMProfileData.lib;LLVMX86AsmParser.lib;LLVMX86Desc.lib;LLVMX86AsmPrinter.lib;LLVMX86Utils.lib;LLVMObject.lib;LLVMMCParser.lib;LLVMBitReader.lib;LLVMCore.lib;LLVMX86Disassembler.lib;LLVMX86Info.lib;LLVMMCDisassembler.lib;LLVMMC.lib;LLVMSupport.lib;LLVMDemangle.lib;Platform.lib;wabt.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(LLVM_4_0)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

@@ -30,7 +30,7 @@ public:
     /// Type of a pointer to the Asio io_service strand being used
     typedef lib::shared_ptr<lib::asio::io_service::strand> strand_ptr;
     /// Type of the ASIO socket being used
-    typedef lib::asio::local::stream_protocol::socket socket_type;
+	typedef boost::asio::ip::tcp::socket socket_type;
     /// Type of a shared pointer to the socket being used.
     typedef lib::shared_ptr<socket_type> socket_ptr;
 
@@ -45,15 +45,15 @@ public:
         return false;
     }
 
-    lib::asio::local::stream_protocol::socket & get_socket() {
+    socket_type & get_socket() {
         return *m_socket;
     }
 
-    lib::asio::local::stream_protocol::socket & get_next_layer() {
+    socket_type & get_next_layer() {
         return *m_socket;
     }
 
-    lib::asio::local::stream_protocol::socket & get_raw_socket() {
+    socket_type & get_raw_socket() {
         return *m_socket;
     }
 
@@ -82,7 +82,7 @@ protected:
             return socket::make_error_code(socket::error::invalid_state);
         }
 
-        m_socket = lib::make_shared<lib::asio::local::stream_protocol::socket>(
+        m_socket = lib::make_shared<socket_type>(
             lib::ref(*service));
 
         m_state = READY;
@@ -186,7 +186,7 @@ public:
     /// Type of a pointer to the ASIO io_service being used
     typedef lib::asio::io_service * io_service_ptr;
     /// Type of a shared pointer to the acceptor being used
-    typedef lib::shared_ptr<lib::asio::local::stream_protocol::acceptor> acceptor_ptr;
+    typedef lib::shared_ptr<lib::asio::ip::tcp::acceptor> acceptor_ptr;
     /// Type of timer handle
     typedef lib::shared_ptr<lib::asio::steady_timer> timer_ptr;
     /// Type of a shared pointer to an io_service work object
@@ -266,7 +266,7 @@ public:
         m_alog->write(log::alevel::devel,"asio::init_asio");
 
         m_io_service = ptr;
-        m_acceptor = lib::make_shared<lib::asio::local::stream_protocol::acceptor>(
+        m_acceptor = lib::make_shared<lib::asio::ip::tcp::acceptor>(
             lib::ref(*m_io_service));
 
         m_state = READY;
@@ -353,7 +353,7 @@ public:
      * @param ep An endpoint to read settings from
      * @param ec Set to indicate what error occurred, if any.
      */
-    void listen(lib::asio::local::stream_protocol::endpoint const & ep, lib::error_code & ec)
+    void listen(lib::asio::ip::tcp::endpoint const & ep, lib::error_code & ec)
     {
         if (m_state != READY) {
             m_elog->write(log::elevel::library,
@@ -369,15 +369,17 @@ public:
 
         {
             boost::system::error_code test_ec;
-            lib::asio::local::stream_protocol::socket test_socket(get_io_service());
+            lib::asio::ip::tcp::socket test_socket(get_io_service());
             test_socket.connect(ep, test_ec);
 
             //looks like a service is already running on that socket, probably another keosd, don't touch it
             if(test_ec == boost::system::errc::success)
                bec = boost::system::errc::make_error_code(boost::system::errc::address_in_use);
             //socket exists but no one home, go ahead and remove it and continue on
+#ifndef _MSC_VER
             else if(test_ec == boost::system::errc::connection_refused)
                ::unlink(ep.path().c_str());
+#endif
             else if(test_ec != boost::system::errc::no_such_file_or_directory)
                bec = test_ec;
         }
@@ -409,7 +411,7 @@ public:
      *
      * @param ep An endpoint to read settings from
      */
-    void listen(lib::asio::local::stream_protocol::endpoint const & ep) {
+    void listen(lib::asio::ip::tcp::endpoint const & ep) {
         lib::error_code ec;
         listen(ep,ec);
         if (ec) { throw exception(ec); }

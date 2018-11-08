@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\webassembly">
+      <UniqueIdentifier>{854c977e-1775-4790-ae03-85319fe3e96e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\webassembly">
+      <UniqueIdentifier>{75a97c0b-c364-4196-8493-4acc4970fc36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libraries\chain\abi_serializer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\apply_context.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\asset.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\authorization_manager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\block_header.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\block_header_state.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\block_log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\block_state.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\chain_id_type.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\controller.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\eosio_contract.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\eosio_contract_abi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\fork_database.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\genesis_state.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\merkle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\name.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\resource_limits.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\snapshot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\transaction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\transaction_context.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\wasm_eosio_injection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\wasm_eosio_validation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\wasm_interface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\wast_to_wasm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\webassembly\wabt.cpp">
+      <Filter>源文件\webassembly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\webassembly\wavm.cpp">
+      <Filter>源文件\webassembly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\chain_config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\sigaction-win.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\genesis_state_root_key.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\abi_def.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\abi_serializer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\account_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\action.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\action_receipt.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\apply_context.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\asset.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\authority.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\authority_checker.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\authorization_manager.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_header.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_header_state.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_log.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_state.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_summary_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\block_timestamp.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\chain_config.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\chain_id_type.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\chain_snapshot.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\config.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\contract_table_objects.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\contract_types.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\controller.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\database_utils.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\eosio_contract.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\exceptions.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\fixed_key.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\fork_database.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\generated_transaction_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\genesis_state.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\global_property_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\incremental_merkle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\merkle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\multi_index_includes.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\name.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\permission_link_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\permission_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\producer_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\producer_schedule.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\protocol.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\resource_limits.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\resource_limits_private.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\reversible_block_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\snapshot.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\symbol.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\trace.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction_context.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction_metadata.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\transaction_object.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\types.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_binary_ops.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_constraints.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_injection.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_eosio_validation.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_interface.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wasm_interface_private.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\wast_to_wasm.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\common.hpp">
+      <Filter>头文件\webassembly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\runtime_interface.hpp">
+      <Filter>头文件\webassembly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\wabt.hpp">
+      <Filter>头文件\webassembly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\include\eosio\chain\webassembly\wavm.hpp">
+      <Filter>头文件\webassembly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\chain\sigaction-win.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\libraries\chain\include\eosio\chain\core_symbol.hpp.in">
+      <Filter>头文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>

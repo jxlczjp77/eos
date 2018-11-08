@@ -9,8 +9,9 @@
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
 namespace eosio { namespace chain { namespace config {
-
+#ifndef _MSC_VER
 typedef __uint128_t uint128_t;
+#endif // !_MSC_VER
 
 const static auto default_blocks_dir_name    = "blocks";
 const static auto reversible_blocks_dir_name = "reversible";

@@ -1063,7 +1063,7 @@ namespace eosio {
       }
       default:
          fc_dlog(logger, "sending empty request but not calling sync wait on ${p}", ("p",peer_name()));
-         enqueue( ( sync_request_message ) {0,0} );
+         enqueue( sync_request_message {0,0} );
       }
    }
 
@@ -1793,7 +1793,7 @@ namespace eosio {
                //At this point the details of the txn are not known, just its id. This
                //effectively gives 120 seconds to learn of the details of the txn which
                //will update the expiry in bcast_transaction
-               c->trx_state.insert( (transaction_state){t,true,true,0,time_point_sec(time_point::now()) + 120,
+               c->trx_state.insert( transaction_state{t,true,true,0,time_point_sec(time_point::now()) + 120,
                         time_point()} );
 
                req.req_trx.ids.push_back( t );
