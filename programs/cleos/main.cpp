@@ -71,8 +71,9 @@ Options:
   -p,--permission TEXT ...    An account and permission level to authorize, as in 'account@permission' (defaults to 'creator@active')
 ```
 */
-
+#ifndef _MSC_VER
 #include <pwd.h>
+#endif
 #include <string>
 #include <vector>
 #include <regex>
@@ -152,7 +153,14 @@ FC_DECLARE_EXCEPTION( localized_exception, 10000000, "an error occured" );
 //copy pasta from keosd's main.cpp
 bfs::path determine_home_directory()
 {
+
    bfs::path home;
+#ifdef _MSC_VER
+   const char *pHome = getenv("HOME");
+   if (pHome != nullptr) {
+	   home = pHome;
+   }
+#else
    struct passwd* pwd = getpwuid(getuid());
    if(pwd) {
       home = pwd->pw_dir;
@@ -160,13 +168,18 @@ bfs::path determine_home_directory()
    else {
       home = getenv("HOME");
    }
-   if(home.empty())
+#endif
+   if (home.empty())
       home = "./";
    return home;
 }
 
 string url = "http://127.0.0.1:8888/";
+#ifdef _MSC_VER
+string default_wallet_url = "http://127.0.0.1:9986";
+#else
 string default_wallet_url = "unix://" + (determine_home_directory() / "eosio-wallet" / (string(key_store_executable_name) + ".sock")).string();
+#endif
 string wallet_url; //to be set to default_wallet_url in main
 bool no_verify = false;
 vector<string> headers;
@@ -227,7 +240,7 @@ vector<chain::permission_level> get_account_permissions(const vector<string>& pe
       vector<string> pieces;
       split(pieces, p, boost::algorithm::is_any_of("@"));
       if( pieces.size() == 1 ) pieces.push_back( "active" );
-      return chain::permission_level{ .actor = pieces[0], .permission = pieces[1] };
+      return chain::permission_level{ pieces[0], pieces[1] };
    });
    vector<chain::permission_level> accountPermissions;
    boost::range::copy(fixedPermissions, back_inserter(accountPermissions));
@@ -413,7 +426,11 @@ fc::variant bin_to_variant( const account_name& account, const action_name& acti
 
 fc::variant json_from_file_or_string(const string& file_or_str, fc::json::parse_type ptype = fc::json::legacy_parser)
 {
+#ifdef _MSC_VER
+	regex r("^[ \\t]*[\\{\\[]");
+#else
    regex r("^[ \t]*[\{\[]");
+#endif
    if ( !regex_search(file_or_str, r) && fc::is_regular_file(file_or_str) ) {
       return fc::json::from_file(file_or_str, ptype);
    } else {
@@ -508,14 +525,14 @@ void send_transaction( signed_transaction& trx, int32_t extra_kcpu, packed_trans
 }
 
 chain::action create_newaccount(const name& creator, const name& newaccount, public_key_type owner, public_key_type active) {
+	eosio::chain::newaccount account;
+	account.creator = creator;
+	account.name = newaccount;
+	account.owner = eosio::chain::authority{ 1, {{owner, 1}}, {} };
+	account.active = eosio::chain::authority{ 1, {{active, 1}}, {} };
    return action {
       tx_permission.empty() ? vector<chain::permission_level>{{creator,config::active_name}} : get_account_permissions(tx_permission),
-      eosio::chain::newaccount{
-         .creator      = creator,
-         .name         = newaccount,
-         .owner        = eosio::chain::authority{1, {{owner, 1}}, {}},
-         .active       = eosio::chain::authority{1, {{active, 1}}, {}}
-      }
+	  account
    };
 }
 
@@ -590,8 +607,8 @@ chain::action create_setabi(const name& account, const bytes& abi) {
    return action {
       tx_permission.empty() ? vector<chain::permission_level>{{account,config::active_name}} : get_account_permissions(tx_permission),
       setabi{
-         .account   = account,
-         .abi       = abi
+         account,
+         abi
       }
    };
 }
@@ -600,10 +617,10 @@ chain::action create_setcode(const name& account, const bytes& code) {
    return action {
       tx_permission.empty() ? vector<chain::permission_level>{{account,config::active_name}} : get_account_permissions(tx_permission),
       setcode{
-         .account   = account,
-         .vmtype    = 0,
-         .vmversion = 0,
-         .code      = code
+         account,
+         0,
+         0,
+         code
       }
    };
 }
@@ -771,7 +788,18 @@ struct set_action_permission_subcommand {
 
 bool local_port_used() {
     using namespace boost::asio;
-
+#ifdef _MSC_VER
+	io_service ios;
+	boost::system::error_code ec;
+	std::vector<string> tmp;
+	auto r = default_wallet_url.substr(strlen("http://"));
+	boost::split(tmp, r, boost::is_any_of(":"));
+	auto add = boost::asio::ip::address::from_string(tmp[0]);
+	boost::asio::ip::tcp::endpoint endpoint(add, boost::lexical_cast<int>(tmp[1]));
+	boost::asio::ip::tcp::socket s(ios);
+	s.connect(endpoint, ec);
+	return !ec;
+#else
     io_service ios;
     local::stream_protocol::endpoint endpoint(wallet_url.substr(strlen("unix://")));
     local::stream_protocol::socket socket(ios);
@@ -779,6 +807,7 @@ bool local_port_used() {
     socket.connect(endpoint, ec);
 
     return !ec;
+#endif
 }
 
 void try_local_port(uint32_t duration) {
@@ -825,12 +854,17 @@ void ensure_keosd_running(CLI::App* app) {
         binPath = boost::filesystem::canonical(binPath);
 
         vector<std::string> pargs;
+#ifdef _MSC_VER
+		pargs.push_back("--http-server-address");
+		pargs.push_back(default_wallet_url);
+#else
         pargs.push_back("--http-server-address");
         pargs.push_back("");
         pargs.push_back("--https-server-address");
         pargs.push_back("");
         pargs.push_back("--unix-socket-path");
         pargs.push_back(string(key_store_executable_name) + ".sock");
+#endif
 
         ::boost::process::child keos(binPath, pargs,
                                      bp::std_in.close(),
@@ -1745,8 +1779,10 @@ CLI::callback_t header_opt_callback = [](CLI::results_t res) {
 
 int main( int argc, char** argv ) {
    setlocale(LC_ALL, "");
+#ifndef _MSC_VER
    bindtextdomain(locale_domain, locale_path);
    textdomain(locale_domain);
+#endif
    context = eosio::client::http::create_http_context();
    wallet_url = default_wallet_url;
 

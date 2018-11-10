@@ -14,9 +14,11 @@
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
 #include <boost/dll/runtime_symbol_info.hpp>
-
+#ifdef _MSC_VER
+#include <windows.h>
+#else
 #include <dlfcn.h>
-
+#endif
 namespace eosio { namespace wallet {
 
 using namespace fc::crypto::r1;
@@ -36,6 +38,12 @@ struct yubihsm_api {
    struct yubihsm_shlib {
       yubihsm_shlib() {
          const char* lib_name;
+#ifdef _MSC_VER
+		 lib_name = "libyubihsm.dll";
+		 _handle = (void *)LoadLibraryA(lib_name);
+		 if (!_handle)
+			 FC_THROW("Failed to load libyubihsm: ${m}", ("m", (uint32_t)GetLastError()));
+#else
 #if defined( __APPLE__ )
          lib_name = "libyubihsm.dylib";
 #elif defined( __linux__ )
@@ -44,17 +52,26 @@ struct yubihsm_api {
          _handle = dlopen(lib_name, RTLD_NOW);
          if(!_handle)
             FC_THROW("Failed to load libyubihsm: ${m}", ("m", dlerror()));
-      }
+#endif
+	  }
       ~yubihsm_shlib() {
-         dlclose(_handle);
-      }
+#ifdef _MSC_VER
+		  FreeLibrary((HMODULE)_handle);
+#else
+		  dlclose(_handle);
+#endif
+	  }
 
       func_ptr operator[](const char* import_name) const {
+#ifdef _MSC_VER
+		  void *ret = (void *)GetProcAddress((HMODULE)_handle, import_name);
+#else
          dlerror();
          void* ret = dlsym(_handle, import_name);
          char* error;
          if((error = dlerror()))
             FC_THROW("Failed to import ${i} from libyubihsm: ${m}", ("i", import_name)("m", error));
+#endif
          return func_ptr(ret);
       }
 
@@ -107,7 +124,7 @@ struct yubihsm_wallet_impl {
    key_map_type::iterator populate_key_map_with_keyid(const uint16_t key_id) {
       yh_rc rc;
       size_t blob_sz = 128;
-      uint8_t blob[blob_sz];
+      uint8_t blob[128];
       if((rc = api.util_get_pubkey(session, key_id, blob, &blob_sz, nullptr)))
          FC_THROW_EXCEPTION(chain::wallet_exception, "yh_util_get_pubkey failed: ${m}", ("m", api.strerror(rc)));
       if(blob_sz != 64)
@@ -151,7 +168,7 @@ struct yubihsm_wallet_impl {
             FC_THROW_EXCEPTION(chain::wallet_exception, "Given authkey cannot perform signing");
 
          size_t found_objects_n = 64*1024;
-         yh_object_descriptor found_objs[found_objects_n];
+         yh_object_descriptor found_objs[64 * 1024];
          yh_capabilities find_caps;
          api.capabilities_to_num("asymmetric_sign_ecdsa", &find_caps);
          if((rc = api.util_list_objects(session, 0, YH_ASYMMETRIC, 0, &find_caps, YH_ALGO_EC_P256, nullptr, found_objs, &found_objects_n)))
@@ -206,7 +223,7 @@ struct yubihsm_wallet_impl {
          return optional<signature_type>{};
 
       size_t der_sig_sz = 128;
-      uint8_t der_sig[der_sig_sz];
+      uint8_t der_sig[128];
       yh_rc rc;
       if((rc = api.util_sign_ecdsa(session, it->second, (uint8_t*)d.data(), d.data_size(), der_sig, &der_sig_sz))) {
          lock();

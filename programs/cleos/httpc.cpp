@@ -219,12 +219,15 @@ namespace eosio { namespace client { namespace http {
    std::string re;
 
    try {
+#ifndef _MSC_VER
       if(url.scheme == "unix") {
          boost::asio::local::stream_protocol::socket unix_socket(cp.context->ios);
          unix_socket.connect(boost::asio::local::stream_protocol::endpoint(url.server));
          re = do_txrx(unix_socket, request, status_code);
       }
-      else if(url.scheme == "http") {
+      else 
+#endif
+		  if(url.scheme == "http") {
          tcp::socket socket(cp.context->ios);
          do_connect(socket, url);
          re = do_txrx(socket, request, status_code);

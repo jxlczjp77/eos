@@ -49,6 +49,9 @@ namespace eosio { namespace chain {
                if (!block_write) {
                   block_stream.close();
                   block_stream.open(block_file.generic_string().c_str(), LOG_WRITE);
+#ifdef _MSC_VER
+				  block_stream.seekp(0, std::ios::end);
+#endif
                   block_write = true;
                }
             }
@@ -68,7 +71,10 @@ namespace eosio { namespace chain {
                if (!index_write) {
                   index_stream.close();
                   index_stream.open(index_file.generic_string().c_str(), LOG_WRITE);
-                  index_write = true;
+#ifdef _MSC_VER
+				  index_stream.seekp(0, std::ios::end);
+#endif
+				  index_write = true;
                }
             }
       };

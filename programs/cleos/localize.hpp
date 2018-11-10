@@ -3,8 +3,9 @@
  *  @copyright defined in eos/LICENSE.txt
  */
 #pragma once
-
+#ifndef _MSC_VER
 #include <libintl.h>
+#endif
 #include <fc/variant.hpp>
 
 namespace eosio { namespace client { namespace localize {
@@ -17,7 +18,11 @@ namespace eosio { namespace client { namespace localize {
    inline auto localized_with_variant( const char* raw_fmt, const fc::variant_object& args) {
       if (raw_fmt != nullptr) {
          try {
+#ifdef _MSC_VER
+			 return fc::format_string(raw_fmt, args);
+#else
             return fc::format_string(::gettext(raw_fmt), args);
+#endif
          } catch (...) {
          }
          return std::string(raw_fmt);

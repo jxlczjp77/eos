@@ -12,8 +12,9 @@
 #include <fc/exception/exception.hpp>
 
 #include <boost/exception/diagnostic_information.hpp>
-
+#ifndef _MSC_VER
 #include <pwd.h>
+#endif
 #include "config.hpp"
 
 using namespace appbase;
@@ -22,6 +23,12 @@ using namespace eosio;
 bfs::path determine_home_directory()
 {
    bfs::path home;
+#ifdef _MSC_VER
+   const char *pHome = getenv("HOME");
+   if (pHome != nullptr) {
+	   home = pHome;
+   }
+#else
    struct passwd* pwd = getpwuid(getuid());
    if(pwd) {
       home = pwd->pw_dir;
@@ -29,6 +36,7 @@ bfs::path determine_home_directory()
    else {
       home = getenv("HOME");
    }
+#endif
    if(home.empty())
       home = "./";
    return home;
@@ -40,16 +48,16 @@ int main(int argc, char** argv)
       bfs::path home = determine_home_directory();
       app().set_default_data_dir(home / "eosio-wallet");
       app().set_default_config_dir(home / "eosio-wallet");
-      http_plugin::set_defaults({
-         .address_config_prefix = "",
-         .default_unix_socket_path = keosd::config::key_store_executable_name + ".sock",
-         .default_http_port = 0
+      http_plugin::set_defaults(http_plugin_defaults{
+         "",
+         keosd::config::key_store_executable_name + ".sock",
+         0
       });
       app().register_plugin<wallet_api_plugin>();
       if(!app().initialize<wallet_plugin, wallet_api_plugin, http_plugin>(argc, argv))
          return -1;
       auto& http = app().get_plugin<http_plugin>();
-      http.add_handler("/v1/keosd/stop", [](string, string, url_response_callback cb) { cb(200, "{}"); std::raise(SIGTERM); } );
+      http.add_handler("/v1/keosd/stop", [](string, string, url_response_callback cb) { cb(200, "{}"); raise(SIGTERM); } );
       app().startup();
       app().exec();
    } catch (const fc::exception& e) {

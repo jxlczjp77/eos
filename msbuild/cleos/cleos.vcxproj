@@ -12,8 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{42875923-C8C8-4C0B-B26E-5D5E58D85592}</ProjectGuid>
-    <RootNamespace>nodeos</RootNamespace>
+    <ProjectGuid>{BAD168C2-699D-400A-BB28-AA23008B795B}</ProjectGuid>
+    <RootNamespace>cleos</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -44,14 +44,7 @@
     <Import Project="..\plugin_base.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)out\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)out\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -61,12 +54,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(LLVM_4_0)\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>
-      </DelayLoadDLLs>
-      <ForceSymbolReferences>??0chain_plugin@eosio@@QEAA@XZ;??0test_control_plugin@eosio@@QEAA@XZ;??0test_control_api_plugin@eosio@@QEAA@XZ;??0template_plugin@eosio@@QEAA@XZ;??0producer_plugin@eosio@@QEAA@XZ;??0producer_api_plugin@eosio@@QEAA@XZ;??0net_plugin@eosio@@QEAA@XZ;??0net_api_plugin@eosio@@QEAA@XZ;??0mongo_db_plugin@eosio@@QEAA@XZ;??0login_plugin@eosio@@QEAA@XZ;??0http_plugin@eosio@@QEAA@XZ;??0http_client_plugin@eosio@@QEAA@XZ;??0history_plugin@eosio@@QEAA@XZ;??0history_api_plugin@eosio@@QEAA@XZ;??0faucet_testnet_plugin@eosio@@QEAA@XZ;??0db_size_api_plugin@eosio@@QEAA@XZ;??0chain_api_plugin@eosio@@QEAA@XZ;??0bnet_plugin@eosio@@QEAA@XZ;??0wallet_api_plugin@eosio@@QEAA@XZ;??0wallet_plugin@eosio@@QEAA@XZ</ForceSymbolReferences>
-      <AdditionalDependencies>bsoncxx.lib;mongocxx.lib;bson-1.0.lib;mongoc-1.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -80,15 +68,19 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Userenv.lib;LLVMPasses.lib;LLVMipo.lib;LLVMInstrumentation.lib;LLVMVectorize.lib;LLVMIRReader.lib;LLVMAsmParser.lib;LLVMLinker.lib;LLVMMCJIT.lib;LLVMExecutionEngine.lib;LLVMRuntimeDyld.lib;LLVMDebugInfoDWARF.lib;LLVMX86CodeGen.lib;LLVMAsmPrinter.lib;LLVMDebugInfoCodeView.lib;LLVMDebugInfoMSF.lib;LLVMGlobalISel.lib;LLVMSelectionDAG.lib;LLVMCodeGen.lib;LLVMScalarOpts.lib;LLVMInstCombine.lib;LLVMBitWriter.lib;LLVMTransformUtils.lib;LLVMTarget.lib;LLVMAnalysis.lib;LLVMProfileData.lib;LLVMX86AsmParser.lib;LLVMX86Desc.lib;LLVMX86AsmPrinter.lib;LLVMX86Utils.lib;LLVMObject.lib;LLVMMCParser.lib;LLVMBitReader.lib;LLVMCore.lib;LLVMX86Disassembler.lib;LLVMX86Info.lib;LLVMMCDisassembler.lib;LLVMMC.lib;LLVMSupport.lib;LLVMDemangle.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\programs\nodeos\main.cpp" />
+    <ClInclude Include="..\..\programs\cleos\CLI11.hpp" />
+    <ClInclude Include="..\..\programs\cleos\config.hpp" />
+    <ClInclude Include="..\..\programs\cleos\help_text.hpp" />
+    <ClInclude Include="..\..\programs\cleos\httpc.hpp" />
+    <ClInclude Include="..\..\programs\cleos\localize.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\programs\nodeos\config.hpp" />
+    <ClCompile Include="..\..\programs\cleos\help_text.cpp" />
+    <ClCompile Include="..\..\programs\cleos\httpc.cpp" />
+    <ClCompile Include="..\..\programs\cleos\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
