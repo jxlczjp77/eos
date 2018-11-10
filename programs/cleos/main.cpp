@@ -856,7 +856,7 @@ void ensure_keosd_running(CLI::App* app) {
         vector<std::string> pargs;
 #ifdef _MSC_VER
 		pargs.push_back("--http-server-address");
-		pargs.push_back(default_wallet_url);
+		pargs.push_back(default_wallet_url.substr(strlen("http://")));
 #else
         pargs.push_back("--http-server-address");
         pargs.push_back("");
