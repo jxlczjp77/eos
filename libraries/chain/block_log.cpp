@@ -1,4 +1,4 @@
-/**
+﻿/**
  *  @file
  *  @copyright defined in eos/LICENSE.txt
  */
@@ -384,7 +384,13 @@ namespace eosio { namespace chain {
       auto backup_dir = blocks_dir.parent_path();
       auto blocks_dir_name = blocks_dir.filename();
       EOS_ASSERT( blocks_dir_name.generic_string() != ".", block_log_exception, "Invalid path to blocks directory" );
-      backup_dir = backup_dir / blocks_dir_name.generic_string().append("-").append( now );
+	  string now_ = now;
+	  do {
+		  size_t pos = now_.find_first_of(':');
+		  if (pos == string::npos) break;
+		  now_.replace(pos, 1, "");
+	  } while (true);
+      backup_dir = backup_dir / blocks_dir_name.generic_string().append("-").append(now_);
 
       EOS_ASSERT( !fc::exists(backup_dir), block_log_backup_dir_exist,
                  "Cannot move existing blocks directory to already existing directory '${new_blocks_dir}'",
