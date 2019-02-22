@@ -1,4 +1,4 @@
-#include <eosio/chain/wasm_interface.hpp>
+﻿#include <eosio/chain/wasm_interface.hpp>
 #include <eosio/chain/apply_context.hpp>
 #include <eosio/chain/controller.hpp>
 #include <eosio/chain/transaction_context.hpp>
@@ -1328,7 +1328,7 @@ class transaction_api : public context_aware_api {
          context.execute_context_free_inline(std::move(act));
       }
 
-      void send_deferred( const uint128_t& sender_id, account_name payer, array_ptr<char> data, size_t data_len, uint32_t replace_existing) {
+      void send_deferred( const uint64_t& sender_id, account_name payer, array_ptr<char> data, size_t data_len, uint32_t replace_existing) {
          try {
             transaction trx;
             fc::raw::unpack<transaction>(data, data_len, trx);
@@ -1336,9 +1336,8 @@ class transaction_api : public context_aware_api {
          } FC_RETHROW_EXCEPTIONS(warn, "data as hex: ${data}", ("data", fc::to_hex(data, data_len)))
       }
 
-      bool cancel_deferred( const uint128_t& val ) {
-         fc::uint128_t sender_id( uint64_t(val>>64), uint64_t(val) );
-         return context.cancel_deferred_transaction( (uint128_t)sender_id );
+      bool cancel_deferred( const uint64_t& sender_id) {
+         return context.cancel_deferred_transaction( sender_id );
       }
 };
 
