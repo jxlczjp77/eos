@@ -77,7 +77,7 @@
     <ClCompile Include="..\..\plugins\wallet_plugin\wallet_plugin.cpp" />
     <ClCompile Include="..\..\plugins\wallet_plugin\yubihsm_wallet.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

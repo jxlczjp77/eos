@@ -80,7 +80,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(MONGO_CXX_DRIVER_3_4_0)\lib;$(MONGO_C_DRIVER_1_13_0)\lib;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MONGO_CXX_DRIVER_3_4_0)\lib;$(MONGO_C_DRIVER_1_13_0)\lib;$(LLVM_4_0)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>bsoncxx.lib;mongocxx.lib;bson-1.0.lib;mongoc-1.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
