@@ -82,6 +82,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(MONGO_CXX_DRIVER_3_4_0)\lib;$(MONGO_C_DRIVER_1_13_0)\lib;$(LLVM_4_0)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>bsoncxx.lib;mongocxx.lib;bson-1.0.lib;mongoc-1.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ForceSymbolReferences>??0chain_plugin@eosio@@QEAA@XZ;??0test_control_plugin@eosio@@QEAA@XZ;??0test_control_api_plugin@eosio@@QEAA@XZ;??0template_plugin@eosio@@QEAA@XZ;??0producer_plugin@eosio@@QEAA@XZ;??0producer_api_plugin@eosio@@QEAA@XZ;??0net_plugin@eosio@@QEAA@XZ;??0net_api_plugin@eosio@@QEAA@XZ;??0mongo_db_plugin@eosio@@QEAA@XZ;??0login_plugin@eosio@@QEAA@XZ;??0http_plugin@eosio@@QEAA@XZ;??0http_client_plugin@eosio@@QEAA@XZ;??0history_plugin@eosio@@QEAA@XZ;??0history_api_plugin@eosio@@QEAA@XZ;??0faucet_testnet_plugin@eosio@@QEAA@XZ;??0db_size_api_plugin@eosio@@QEAA@XZ;??0chain_api_plugin@eosio@@QEAA@XZ;??0bnet_plugin@eosio@@QEAA@XZ;??0wallet_api_plugin@eosio@@QEAA@XZ;??0wallet_plugin@eosio@@QEAA@XZ</ForceSymbolReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

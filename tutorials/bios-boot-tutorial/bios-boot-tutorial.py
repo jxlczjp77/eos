@@ -29,7 +29,7 @@ systemAccounts = [
 ]
 
 def jsonArg(a):
-    return " '" + json.dumps(a) + "' "
+    return " \"" + json.dumps(a).replace('"', '\\"') + "\" "
 
 def run(args):
     print('bios-boot-tutorial.py:', args)
@@ -59,7 +59,10 @@ def getOutput(args):
     return proc.communicate()[0].decode('utf-8')
 
 def getJsonOutput(args):
-    return json.loads(getOutput(args))
+    print('bios-boot-tutorial.py:', args)
+    logFile.write(args + '\n')
+    proc = subprocess.Popen(args, shell=True, stdout=subprocess.PIPE)
+    return json.loads(proc.communicate()[0])
 
 def sleep(t):
     print('sleep', t, '...')
@@ -68,8 +71,8 @@ def sleep(t):
 
 def startWallet():
     run('rm -rf ' + os.path.abspath(args.wallet_dir))
-    run('mkdir -p ' + os.path.abspath(args.wallet_dir))
-    background(args.keosd + ' --unlock-timeout %d --http-server-address 127.0.0.1:6666 --wallet-dir %s' % (unlockTimeout, os.path.abspath(args.wallet_dir)))
+    run('mkdir ' + os.path.abspath(args.wallet_dir))
+    background(args.keosd + ' --unlock-timeout %d --http-server-address 0.0.0.0:6666 --wallet-dir %s' % (unlockTimeout, os.path.abspath(args.wallet_dir)))
     sleep(.4)
     run(args.cleos + 'wallet create --to-console')
 
@@ -93,7 +96,7 @@ def importKeys():
 def startNode(nodeIndex, account):
     dir = args.nodes_dir + ('%02d-' % nodeIndex) + account['name'] + '/'
     run('rm -rf ' + dir)
-    run('mkdir -p ' + dir)
+    run('mkdir "' + dir + '"')
     otherOpts = ''.join(list(map(lambda i: '    --p2p-peer-address localhost:' + str(9000 + i), range(nodeIndex))))
     if not nodeIndex: otherOpts += (
         '    --plugin eosio::history_plugin'
@@ -114,7 +117,7 @@ def startNode(nodeIndex, account):
         '    --p2p-max-nodes-per-host ' + str(maxClients) +
         '    --enable-stale-production'
         '    --producer-name ' + account['name'] +
-        '    --private-key \'["' + account['pub'] + '","' + account['pvt'] + '"]\''
+        '    --private-key [\\"' + account['pub'] + '\\",\\"' + account['pvt'] + '\\"]'
         '    --plugin eosio::http_plugin'
         '    --plugin eosio::chain_api_plugin'
         '    --plugin eosio::producer_plugin' +
@@ -149,6 +152,7 @@ def allocateFunds(b, e):
     return total
 
 def createStakedAccounts(b, e):
+    #allocateFunds(0, len(accounts))
     ramFunds = round(args.ram_funds * 10000)
     configuredMinStake = round(args.min_stake * 10000)
     maxUnstaked = round(args.max_unstaked * 10000)
@@ -166,9 +170,9 @@ def createStakedAccounts(b, e):
         stake = funds - ramFunds - unstaked
         stakeNet = round(stake / 2)
         stakeCpu = stake - stakeNet
-        print('%s: total funds=%s, ram=%s, net=%s, cpu=%s, unstaked=%s' % (a['name'], intToCurrency(a['funds']), intToCurrency(ramFunds), intToCurrency(stakeNet), intToCurrency(stakeCpu), intToCurrency(unstaked)))
+        print('%s: total funds="%s", ram="%s", net="%s", cpu="%s", unstaked="%s"' % (a['name'], intToCurrency(a['funds']), intToCurrency(ramFunds), intToCurrency(stakeNet), intToCurrency(stakeCpu), intToCurrency(unstaked)))
         assert(funds == ramFunds + stakeNet + stakeCpu + unstaked)
-        retry(args.cleos + 'system newaccount --transfer eosio %s %s --stake-net "%s" --stake-cpu "%s" --buy-ram "%s"   ' % 
+        run(args.cleos + 'system newaccount --transfer eosio %s %s --stake-net "%s" --stake-cpu "%s" --buy-ram "%s" ' % 
             (a['name'], a['pub'], intToCurrency(stakeNet), intToCurrency(stakeCpu), intToCurrency(ramFunds)))
         if unstaked:
             retry(args.cleos + 'transfer eosio %s "%s"' % (a['name'], intToCurrency(unstaked)))
@@ -184,10 +188,7 @@ def listProducers():
 def vote(b, e):
     for i in range(b, e):
         voter = accounts[i]['name']
-        k = args.num_producers_vote
-        if k > numProducers:
-            k = numProducers - 1
-        prods = random.sample(range(firstProducer, firstProducer + numProducers), k)
+        prods = random.sample(range(firstProducer, firstProducer + numProducers), args.num_producers_vote)
         prods = ' '.join(map(lambda x: accounts[x]['name'], prods))
         retry(args.cleos + 'system voteproducer prods ' + voter + ' ' + prods)
 
@@ -275,29 +276,27 @@ def produceNewAccounts():
             f.write('        {"name":"%s", "pvt":"%s", "pub":"%s"},\n' % (name, r[1], r[2]))
 
 def stepKillAll():
-    run('killall keosd nodeos || true')
+    run('taskkill /F /IM keosd.exe || true')
+    run('taskkill /F /IM nodeos.exe || true')
     sleep(1.5)
 def stepStartWallet():
     startWallet()
     importKeys()
 def stepStartBoot():
     startNode(0, {'name': 'eosio', 'pvt': args.private_key, 'pub': args.public_key})
-    sleep(1.5)
+    sleep(30)
 def stepInstallSystemContracts():
-    run(args.cleos + 'set contract eosio.token ' + args.contracts_dir + '/eosio.token/')
-    run(args.cleos + 'set contract eosio.msig ' + args.contracts_dir + '/eosio.msig/')
+    run(args.cleos + 'set contract eosio.token ' + args.contracts_dir + 'eosio.token/')
+    run(args.cleos + 'set contract eosio.msig ' + args.contracts_dir + 'eosio.msig/')
 def stepCreateTokens():
-    run(args.cleos + 'push action eosio.token create \'["eosio", "10000000000.0000 %s"]\' -p eosio.token' % (args.symbol))
+    run(args.cleos + 'push action eosio.token create "[\\"eosio\\",\\"10000000000.0000 %s\\"]" -p eosio.token' % (args.symbol))
     totalAllocation = allocateFunds(0, len(accounts))
-    run(args.cleos + 'push action eosio.token issue \'["eosio", "%s", "memo"]\' -p eosio' % intToCurrency(totalAllocation))
+    run(args.cleos + 'push action eosio.token issue "[\\"eosio\\",\\"%s\\",\\"memo\\"]" -p eosio' % intToCurrency(totalAllocation))
     sleep(1)
 def stepSetSystemContract():
-    retry(args.cleos + 'set contract eosio ' + args.contracts_dir + '/eosio.system/')
+    retry(args.cleos + 'set contract eosio ' + args.contracts_dir + 'eosio.system/')
     sleep(1)
     run(args.cleos + 'push action eosio setpriv' + jsonArg(['eosio.msig', 1]) + '-p eosio@active')
-def stepInitSystemContract():
-    run(args.cleos + 'push action eosio init' + jsonArg(['0', '4,SYS']) + '-p eosio@active')
-    sleep(1)
 def stepCreateStakedAccounts():
     createStakedAccounts(0, len(accounts))
 def stepRegProducers():
@@ -329,36 +328,35 @@ def stepLog():
 parser = argparse.ArgumentParser()
 
 commands = [
-    ('k', 'kill',               stepKillAll,                True,    "Kill all nodeos and keosd processes"),
-    ('w', 'wallet',             stepStartWallet,            True,    "Start keosd, create wallet, fill with keys"),
-    ('b', 'boot',               stepStartBoot,              True,    "Start boot node"),
-    ('s', 'sys',                createSystemAccounts,       True,    "Create system accounts (eosio.*)"),
-    ('c', 'contracts',          stepInstallSystemContracts, True,    "Install system contracts (token, msig)"),
-    ('t', 'tokens',             stepCreateTokens,           True,    "Create tokens"),
-    ('S', 'sys-contract',       stepSetSystemContract,      True,    "Set system contract"),
-    ('I', 'init-sys-contract',  stepInitSystemContract,     True,    "Initialiaze system contract"),
-    ('T', 'stake',              stepCreateStakedAccounts,   True,    "Create staked accounts"),
-    ('p', 'reg-prod',           stepRegProducers,           True,    "Register producers"),
-    ('P', 'start-prod',         stepStartProducers,         True,    "Start producers"),
-    ('v', 'vote',               stepVote,                   True,    "Vote for producers"),
-    ('R', 'claim',              claimRewards,               True,    "Claim rewards"),
-    ('x', 'proxy',              stepProxyVotes,             True,    "Proxy votes"),
-    ('q', 'resign',             stepResign,                 True,    "Resign eosio"),
-    ('m', 'msg-replace',        msigReplaceSystem,          False,   "Replace system contract using msig"),
-    ('X', 'xfer',               stepTransfer,               False,   "Random transfer tokens (infinite loop)"),
-    ('l', 'log',                stepLog,                    True,    "Show tail of node's log"),
+    ('k', 'kill',           stepKillAll,                True,    "Kill all nodeos and keosd processes"),
+    ('w', 'wallet',         stepStartWallet,            True,    "Start keosd, create wallet, fill with keys"),
+    ('b', 'boot',           stepStartBoot,              True,    "Start boot node"),
+    ('s', 'sys',            createSystemAccounts,       True,    "Create system accounts (eosio.*)"),
+    ('c', 'contracts',      stepInstallSystemContracts, True,    "Install system contracts (token, msig)"),
+    ('t', 'tokens',         stepCreateTokens,           True,    "Create tokens"),
+    ('S', 'sys-contract',   stepSetSystemContract,      True,    "Set system contract"),
+    ('T', 'stake',          stepCreateStakedAccounts,   True,    "Create staked accounts"),
+    ('p', 'reg-prod',       stepRegProducers,           True,    "Register producers"),
+    ('P', 'start-prod',     stepStartProducers,         True,    "Start producers"),
+    ('v', 'vote',           stepVote,                   True,    "Vote for producers"),
+    ('R', 'claim',          claimRewards,               True,    "Claim rewards"),
+    ('x', 'proxy',          stepProxyVotes,             True,    "Proxy votes"),
+    ('q', 'resign',         stepResign,                 True,    "Resign eosio"),
+    ('m', 'msg-replace',    msigReplaceSystem,          False,   "Replace system contract using msig"),
+    ('X', 'xfer',           stepTransfer,               False,   "Random transfer tokens (infinite loop)"),
+    ('l', 'log',            stepLog,                    True,    "Show tail of node's log"),
 ]
 
 parser.add_argument('--public-key', metavar='', help="EOSIO Public Key", default='EOS8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr', dest="public_key")
 parser.add_argument('--private-Key', metavar='', help="EOSIO Private Key", default='5K463ynhZoCDDa4RDcr63cUwWLTnKqmdcoTKTHBjqoKfv4u5V7p', dest="private_key")
-parser.add_argument('--cleos', metavar='', help="Cleos command", default='../../build/programs/cleos/cleos --wallet-url http://127.0.0.1:6666 ')
-parser.add_argument('--nodeos', metavar='', help="Path to nodeos binary", default='../../build/programs/nodeos/nodeos')
-parser.add_argument('--keosd', metavar='', help="Path to keosd binary", default='../../build/programs/keosd/keosd')
-parser.add_argument('--contracts-dir', metavar='', help="Path to contracts directory", default='../../build/contracts/')
-parser.add_argument('--nodes-dir', metavar='', help="Path to nodes directory", default='./nodes/')
+parser.add_argument('--cleos', metavar='', help="Cleos command", default='E:/work/c++/eosio/eos/out/bin/x64/Release/cleos.exe --wallet-url http://127.0.0.1:6666 ')
+parser.add_argument('--nodeos', metavar='', help="Path to nodeos binary", default='E:/work/c++/eosio/eos/out/bin/x64/Release/nodeos.exe')
+parser.add_argument('--keosd', metavar='', help="Path to keosd binary", default='E:/work/c++/eosio/eos/out/bin/x64/Release/keosd.exe')
+parser.add_argument('--contracts-dir', metavar='', help="Path to contracts directory", default='E:/work/c++/eosio/eosio/build/contracts/')
+parser.add_argument('--nodes-dir', metavar='', help="Path to nodes directory", default='F:/eosio/local/nodes/')
 parser.add_argument('--genesis', metavar='', help="Path to genesis.json", default="./genesis.json")
-parser.add_argument('--wallet-dir', metavar='', help="Path to wallet directory", default='./wallet/')
-parser.add_argument('--log-path', metavar='', help="Path to log file", default='./output.log')
+parser.add_argument('--wallet-dir', metavar='', help="Path to wallet directory", default='F:/eosio/local/wallet/')
+parser.add_argument('--log-path', metavar='', help="Path to log file", default='F:/eosio/local/output.log')
 parser.add_argument('--symbol', metavar='', help="The eosio.system symbol", default='SYS')
 parser.add_argument('--user-limit', metavar='', help="Max number of users. (0 = no limit)", type=int, default=3000)
 parser.add_argument('--max-user-keys', metavar='', help="Maximum user keys to import into wallet", type=int, default=10)
