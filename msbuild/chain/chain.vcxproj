@@ -58,7 +58,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\libraries\chain\include;$(ProjectDir)..\..\libraries\chainbase\include;$(ProjectDir)..\..\libraries\fc\include;$(ProjectDir)..\..\libraries\wasm-jit\Include;$(ProjectDir)..\..\libraries\softfloat\source\Include;$(ProjectDir)..\..\libraries\utilities\include;$(ProjectDir)..\..\libraries\wabt;$(ProjectDir)..\..\libraries\builtins;$(ProjectDir)..\wabt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINDOWS;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4101;4521;4003;4068;4996;4267;4244;4193;4146;4018;4180;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4003;4101;4521;4068;4996;4267;4244;4193;4146;4018;4180;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <PreprocessToFile>false</PreprocessToFile>
       <LanguageStandard>stdcpp14</LanguageStandard>
@@ -74,7 +74,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\libraries\chain\include;$(ProjectDir)..\..\libraries\chainbase\include;$(ProjectDir)..\..\libraries\fc\include;$(ProjectDir)..\..\libraries\wasm-jit\Include;$(ProjectDir)..\..\libraries\softfloat\source\Include;$(ProjectDir)..\..\libraries\utilities\include;$(ProjectDir)..\..\libraries\wabt;$(ProjectDir)..\..\libraries\builtins;$(ProjectDir)..\wabt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINDOWS;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4101;4521;4003;4068;4996;4267;4244;4193;4146;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4003;4101;4521;4068;4996;4267;4244;4193;4146;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -106,6 +106,7 @@
     <ClCompile Include="..\..\libraries\chain\snapshot.cpp" />
     <ClCompile Include="..\..\libraries\chain\transaction.cpp" />
     <ClCompile Include="..\..\libraries\chain\transaction_context.cpp" />
+    <ClCompile Include="..\..\libraries\chain\transaction_metadata.cpp" />
     <ClCompile Include="..\..\libraries\chain\wasm_eosio_injection.cpp" />
     <ClCompile Include="..\..\libraries\chain\wasm_eosio_validation.cpp" />
     <ClCompile Include="..\..\libraries\chain\wasm_interface.cpp" />

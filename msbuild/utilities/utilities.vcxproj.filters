@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\libraries\utilities\key_conversion.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\libraries\utilities\string_escape.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

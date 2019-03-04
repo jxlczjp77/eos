@@ -126,7 +126,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\libraries\utilities\key_conversion.cpp" />
     <ClCompile Include="..\..\libraries\utilities\string_escape.cpp" />
     <ClCompile Include="..\..\libraries\utilities\tempdir.cpp" />
     <ClCompile Include="..\..\libraries\utilities\words.cpp" />

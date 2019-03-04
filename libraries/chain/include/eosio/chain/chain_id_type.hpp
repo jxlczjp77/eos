@@ -1,6 +1,6 @@
-/**
+﻿/**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in eos/LICENSE
  */
 #pragma once
 
@@ -34,10 +34,10 @@ namespace chain {
         return ds;
       }
 
-      void reflector_verify()const;
+      void reflector_init()const;
 
-      private:
          chain_id_type() = default;
+      private:
 
          // Some exceptions are unfortunately necessary:
          template<typename T>

@@ -108,6 +108,9 @@
     <ClCompile Include="..\..\libraries\chain\genesis_state_root_key.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\chain\transaction_metadata.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libraries\chain\include\eosio\chain\abi_def.hpp">

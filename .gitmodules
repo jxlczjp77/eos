@@ -29,4 +29,4 @@
 	url = https://github.com/jxlczjp77/fc.git
 [submodule "libraries/wabt"]
 	path = libraries/wabt
-	url = http://github.com/EOSIO/wabt
+	url = https://github.com/EOSIO/wabt
